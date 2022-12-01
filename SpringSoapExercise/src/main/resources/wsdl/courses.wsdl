@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2019 rel. 3 sp1 (http://www.altova.com) by  (ABIS Training and Consulting) -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://abis.be/courses" targetNamespace="http://abis.be/courses">
+	<wsdl:types>
+		<xs:schema targetNamespace="http://abis.be/courses" xmlns:tns="http://abis.be/courses" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xs:element name="course">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="courseId" type="xs:string"/>
+						<xs:element ref="tns:shortTitle" />
+						<xs:element name="longTitle" type="xs:string"/>
+						<xs:element ref="tns:numberOfDays"/>
+						<xs:element name="pricePerDay" type="xs:double"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="numberOfDays" type="xs:int"/>
+			<xs:element name="shortTitle" type="xs:string"/>
+			
+			<xs:element name="courses">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:course" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="courseByShortTitleRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:shortTitle"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="courseByShortTitleResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:course"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="coursesByNumberOfDaysRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:numberOfDays"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="coursesByNumberOfDaysResponse">
+			   <xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:courses"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="CourseByShortTitleRequest">
+		<wsdl:part name="parameter" element="tns:courseByShortTitleRequest"/>
+	</wsdl:message>
+	<wsdl:message name="CourseByShortTitleResponse">
+		<wsdl:part name="parameter" element="tns:courseByShortTitleResponse"/>
+	</wsdl:message>
+	<wsdl:message name="CoursesByNumberOfDaysRequest">
+	    <wsdl:part name="parameter" element="tns:coursesByNumberOfDaysRequest"/>
+	</wsdl:message>
+	<wsdl:message name="CoursesByNumberOfDaysResponse">
+		<wsdl:part name="parameter" element="tns:coursesByNumberOfDaysResponse"/>
+	</wsdl:message>
+	
+	<wsdl:portType name="CourseSoap_Port">
+		<wsdl:operation name="CourseByShortTitle">
+			<wsdl:input message="tns:CourseByShortTitleRequest"/>
+			<wsdl:output message="tns:CourseByShortTitleResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="CoursesByNumberOfDays">
+			<wsdl:input message="tns:CoursesByNumberOfDaysRequest"/>
+			<wsdl:output message="tns:CoursesByNumberOfDaysResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CourseSoap" type="tns:CourseSoap_Port">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="CourseByShortTitle">
+			<soap:operation soapAction="http://abis.be/services/persons/findCourseByShortTitle"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CoursesByNumberOfDays">
+			<soap:operation soapAction="http://abis.be/services/persons/findCoursesByNumberOfDays"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	
+	</wsdl:binding>
+	<wsdl:service name="CourseService">
+		<wsdl:port name="CoursePort" binding="tns:CourseSoap">
+			<soap:address location="http://localhost:8080/abis/ws/courses"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
